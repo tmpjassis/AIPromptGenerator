@@ -1,0 +1,14 @@
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\PromptGenerator2.exe
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\PromptGenerator2.deps.json
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\PromptGenerator2.runtimeconfig.json
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\PromptGenerator2.dll
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\PromptGenerator2.pdb
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.AssemblyInfoInputs.cache
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.AssemblyInfo.cs
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.csproj.CoreCompileInputs.cache
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.dll
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\refint\PromptGenerator2.dll
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.pdb
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\PromptGenerator2.genruntimeconfig.cache
+C:\Projetos\PromptGenerator2\obj\Release\net8.0\ref\PromptGenerator2.dll

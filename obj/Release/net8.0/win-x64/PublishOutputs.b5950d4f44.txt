@@ -1,0 +1,2 @@
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\win-x64\PromptGenerator2.pdb
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\win-x64\PromptGenerator2.exe

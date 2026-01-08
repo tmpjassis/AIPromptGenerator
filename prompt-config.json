@@ -1,0 +1,8 @@
+{
+  "nomeController": "ProviderRegister",
+  "tipoEndpoint": "Get",
+  "nomeEndpoint": "PolicyHolder",
+  "nomeMetodo": "AdjustmentIndex",
+  "colunas": "CODINDEX:int; NOMEINDEXREAJ:string",
+  "pastaDestino": "..\\..\\prompts"
+}

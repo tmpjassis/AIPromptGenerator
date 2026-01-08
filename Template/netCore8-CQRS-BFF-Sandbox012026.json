@@ -1,0 +1,36 @@
+﻿{
+  "steps": [
+
+    {
+      "titulo": "Etapa 1",
+      "descricao": "Criar um endpoint do tipo {tipoEndpoint} no #{nomeController}Controller com o nome {nomeEndpoint}",
+      "exemplo": "/// <summary>\\n///  Consulta na core - estipulantes PolicyHolder\\n/// </summary>\\n/// <param name=\"cancellationToken\"></param>\\n/// <returns>Status 200 OK</returns>\\n[Http{tipoEndpoint}(\"PolicyHolder\")]\\n[ServiceFilter(typeof(ValidationFilterAttribute))]\\n[Authorize(Policy = Permissions.History.View)]\\n[ProducesResponseType(typeof(Result<IList<ProviderRegisterApiResponse>>), StatusCodes.Status200OK)]\\n[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status404NotFound)]\\n[ProducesResponseType((int)HttpStatusCode.NotFound)]\\npublic async Task<IActionResult> PolicyHolder(CancellationToken cancellationToken)\\n{\\n    var response = await _providerRegisterService.{tipoEndpoint}PolicyHolder(cancellationToken);\\n    return CustomResponse(response);\\n}"
+    },
+    {
+      "titulo": "Etapa 2",
+      "descricao": "Criar no #I{nomeController}Services e no #{nomeController}Services o método {nomeMetodo} baseado no método abaixo",
+      "interfaces": "#I{nomeController}Services: Task<Result<IList<AdjustmentIndexResponse>>> {tipoEndpoint}AdjustmentIndex(CancellationToken cancellationToken = default);",
+      "implementacao": "public async Task<Result<IList<AdjustmentIndexResponse>>> {tipoEndpoint}AdjustmentIndex(CancellationToken cancellationToken = default)\\n{\\n    try\\n    {\\n        _logger.LogInformation(\"Iniciando consulta de índice de reajuste.\");\\n\\n        var response = await _providerRegisterApiService.{tipoEndpoint}AdjustmentIndex(cancellationToken);\\n\\n        if (response.Succeeded && response.Data != null)\\n        {\\n            _logger.LogInformation(\"Consulta de índice de reajuste realizada com sucesso. Total encontrado: {Count}\", response.Data.Count);\\n        }\\n        else\\n        {\\n            _logger.LogWarning(\"Consulta de índice de reajuste não retornou dados.\");\\n        }\\n\\n        return response;\\n    }\\n    catch (System.ArgumentException ex)\\n    {\\n        _logger.LogWarning(ex, \"Parâmetros inválidos na consulta de índice de reajuste: {Message}\", ex.Message);\\n        AddNotification(nameof(AdjustmentIndexResponse), ex.Message);\\n        return await Result<IList<AdjustmentIndexResponse>>.FailAsync(ex.Message);\\n    }\\n    catch (System.Exception ex)\\n    {\\n        _logger.LogError(ex, \"Erro inesperado ao consultar índice de reajuste\");\\n        AddNotification(\"AdjustmentIndexError\", \"Ocorreu um erro ao processar sua solicitação\");\\n        return await Result<IList<AdjustmentIndexResponse>>.FailAsync(\"Ocorreu um erro ao processar sua solicitação\");\\n    }\\n}"
+    },
+    {
+      "titulo": "Etapa 3",
+      "descricao": "Criar dentro desse namespace: CarePlus.Accreditation.Provider.Register.Infra.Bff.Api.{nomeController}.Response um arquivo cs chamado {nomeEndpoint}Response, baseado no Response abaixo",
+      "namespace": "CarePlus.Accreditation.Provider.Register.Infra.Bff.Api.{nomeController}.Response",
+      "arquivo": "{nomeEndpoint}Response.cs",
+      "modeloBase": "public class AdjustmentIndexResponse\\n{\\n    public int CODINDEX { get; set; }\\n    public string NOMEINDEXREAJ { get; set; } = string.Empty;\\n}",
+      "observacao": "Onde a response é para a tabela com as seguintes colunas: {colunas}"
+    },
+    {
+      "titulo": "Etapa 4",
+      "descricao": "Adicionar um método para {nomeMetodo} dentro de #I{nomeController}ApiService baseado no método abaixo",
+      "interfaceApiService": "Task<Result<IList<BaseTableResponse>>> {tipoEndpoint}BaseTable(CancellationToken cancellationToken = default);"
+    },
+    {
+      "titulo": "Etapa 5",
+      "descricao": "Adicionar um método para {nomeMetodo} dentro de #{nomeController}ApiService baseado no método abaixo",
+      "implementacaoApiService": "public async Task<Result<IList<BaseTableResponse>>> {tipoEndpoint}BaseTable(CancellationToken cancellationToken = default)\\n{\\n    var token = await _authApi.SystemAuthenticateApiAsync(_apiClientOptions);\\n    var action = \"BaseTable\";\\n\\n    HttpParameter parameter = new(_apiClientOptions.NameApiUrl)\\n    {\\n        NameApiUrl = _apiClientOptions!.NameApiUrl,\\n        Url = UrlHelper.BuildUrl(host: _apiClientOptions.Host, controller: controller, action: action),\\n        Headers = token\\n    };\\n    return await new HttpClientInvoker<Result<IList<BaseTableResponse>>>().{tipoEndpoint}Async(parameter);\\n}"
+    }
+
+  ]
+
+}

@@ -1,0 +1,5 @@
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\PromptGenerator2.exe
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\PromptGenerator2.dll
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\PromptGenerator2.deps.json
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\PromptGenerator2.runtimeconfig.json
+C:\Projetos\PromptGenerator2\bin\Release\net8.0\publish\PromptGenerator2.pdb

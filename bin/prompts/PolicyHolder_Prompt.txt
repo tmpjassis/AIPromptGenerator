@@ -1,0 +1,66 @@
+===== Etapa 1 =====
+# titulo
+"Etapa 1"
+
+# descricao
+"Criar um endpoint do tipo Get no #ProviderRegisterController com o nome PolicyHolder"
+
+# exemplo
+"/// \u003Csummary\u003E\\n///  Consulta na core - estipulantes PolicyHolder\\n/// \u003C/summary\u003E\\n/// \u003Cparam name=\u0022cancellationToken\u0022\u003E\u003C/param\u003E\\n/// \u003Creturns\u003EStatus 200 OK\u003C/returns\u003E\\n[HttpGet(\u0022PolicyHolder\u0022)]\\n[ServiceFilter(typeof(ValidationFilterAttribute))]\\n[Authorize(Policy = Permissions.History.View)]\\n[ProducesResponseType(typeof(Result\u003CIList\u003CProviderRegisterApiResponse\u003E\u003E), StatusCodes.Status200OK)]\\n[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status404NotFound)]\\n[ProducesResponseType((int)HttpStatusCode.NotFound)]\\npublic async Task\u003CIActionResult\u003E PolicyHolder(CancellationToken cancellationToken)\\n{\\n    var response = await _providerRegisterService.GetPolicyHolder(cancellationToken);\\n    return CustomResponse(response);\\n}"
+
+
+===== Etapa 2 =====
+# titulo
+"Etapa 2"
+
+# descricao
+"Criar no #IProviderRegisterServices e no #ProviderRegisterServices o m\u00E9todo AdjustmentIndex baseado no m\u00E9todo abaixo"
+
+# interfaces
+"#IProviderRegisterServices: Task\u003CResult\u003CIList\u003CAdjustmentIndexResponse\u003E\u003E\u003E GetAdjustmentIndex(CancellationToken cancellationToken = default);"
+
+# implementacao
+"public async Task\u003CResult\u003CIList\u003CAdjustmentIndexResponse\u003E\u003E\u003E GetAdjustmentIndex(CancellationToken cancellationToken = default)\\n{\\n    try\\n    {\\n        _logger.LogInformation(\u0022Iniciando consulta de \u00EDndice de reajuste.\u0022);\\n\\n        var response = await _providerRegisterApiService.GetAdjustmentIndex(cancellationToken);\\n\\n        if (response.Succeeded \u0026\u0026 response.Data != null)\\n        {\\n            _logger.LogInformation(\u0022Consulta de \u00EDndice de reajuste realizada com sucesso. Total encontrado: {Count}\u0022, response.Data.Count);\\n        }\\n        else\\n        {\\n            _logger.LogWarning(\u0022Consulta de \u00EDndice de reajuste n\u00E3o retornou dados.\u0022);\\n        }\\n\\n        return response;\\n    }\\n    catch (System.ArgumentException ex)\\n    {\\n        _logger.LogWarning(ex, \u0022Par\u00E2metros inv\u00E1lidos na consulta de \u00EDndice de reajuste: {Message}\u0022, ex.Message);\\n        AddNotification(nameof(AdjustmentIndexResponse), ex.Message);\\n        return await Result\u003CIList\u003CAdjustmentIndexResponse\u003E\u003E.FailAsync(ex.Message);\\n    }\\n    catch (System.Exception ex)\\n    {\\n        _logger.LogError(ex, \u0022Erro inesperado ao consultar \u00EDndice de reajuste\u0022);\\n        AddNotification(\u0022AdjustmentIndexError\u0022, \u0022Ocorreu um erro ao processar sua solicita\u00E7\u00E3o\u0022);\\n        return await Result\u003CIList\u003CAdjustmentIndexResponse\u003E\u003E.FailAsync(\u0022Ocorreu um erro ao processar sua solicita\u00E7\u00E3o\u0022);\\n    }\\n}"
+
+
+===== Etapa 3 =====
+# titulo
+"Etapa 3"
+
+# descricao
+"Criar dentro desse namespace: CarePlus.Accreditation.Provider.Register.Infra.Bff.Api.ProviderRegister.Response um arquivo cs chamado PolicyHolderResponse, baseado no Response abaixo"
+
+# namespace
+"CarePlus.Accreditation.Provider.Register.Infra.Bff.Api.ProviderRegister.Response"
+
+# arquivo
+"PolicyHolderResponse.cs"
+
+# modeloBase
+"public class AdjustmentIndexResponse\\n{\\n    public int CODINDEX { get; set; }\\n    public string NOMEINDEXREAJ { get; set; } = string.Empty;\\n}"
+
+# observacao
+"Onde a response \u00E9 para a tabela com as seguintes colunas: CODINDEX:int; NOMEINDEXREAJ:string"
+
+
+===== Etapa 4 =====
+# titulo
+"Etapa 4"
+
+# descricao
+"Adicionar um m\u00E9todo para AdjustmentIndex dentro de #IProviderRegisterApiService baseado no m\u00E9todo abaixo"
+
+# interfaceApiService
+"Task\u003CResult\u003CIList\u003CBaseTableResponse\u003E\u003E\u003E GetBaseTable(CancellationToken cancellationToken = default);"
+
+
+===== Etapa 5 =====
+# titulo
+"Etapa 5"
+
+# descricao
+"Adicionar um m\u00E9todo para AdjustmentIndex dentro de #ProviderRegisterApiService baseado no m\u00E9todo abaixo"
+
+# implementacaoApiService
+"public async Task\u003CResult\u003CIList\u003CBaseTableResponse\u003E\u003E\u003E GetBaseTable(CancellationToken cancellationToken = default)\\n{\\n    var token = await _authApi.SystemAuthenticateApiAsync(_apiClientOptions);\\n    var action = \u0022BaseTable\u0022;\\n\\n    HttpParameter parameter = new(_apiClientOptions.NameApiUrl)\\n    {\\n        NameApiUrl = _apiClientOptions!.NameApiUrl,\\n        Url = UrlHelper.BuildUrl(host: _apiClientOptions.Host, controller: controller, action: action),\\n        Headers = token\\n    };\\n    return await new HttpClientInvoker\u003CResult\u003CIList\u003CBaseTableResponse\u003E\u003E\u003E().GetAsync(parameter);\\n}"
+
