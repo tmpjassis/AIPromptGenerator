@@ -37,7 +37,7 @@
     {
       "titulo": "ETAPA 6 - ADICIONANDO A QUERY SQL NO REPOSITORY",
       "caminho": "building-blocks/Infrastructure/Repository/QueriesSql/{nomeController}QueriesSql.cs",
-      "descricao": "Adicionar método para buscar dados via SQL",
+      "descricao": "Adicionar método para buscar dados  via SQL",
       "exemplo": "async Task<List<{nomeEndpoint}>> I{nomeController}RepositoryQueriesSql.Get{nomeEndpoint}(CancellationToken cancellationToken)\n{\n    string commandsql = @\"select * from {tabela} \";\n    var entity = await _{nomeController}Repository.GetConnection()\n        .QueryAsync<{nomeEndpoint}>(commandsql);\n    return entity.AsList();\n}"
     },
     {
