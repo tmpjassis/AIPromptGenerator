@@ -1,1 +1,49 @@
 ﻿
+
+{
+  "steps": [
+    {
+      "titulo": "ETAPA 1 - CRIAÇÃO DO MAPEAMENTO DO RESPONSE/DOMAIN",
+      "caminho": "building-blocks/Application/{nomeController}/Mappings/ProviderProfile.cs",
+      "descricao": "Inserir novo mapeamento conforme abaixo:",
+      "exemplo": "CreateMap<{nomeEndpoint}Response, {nomeEndpoint}>().ReverseMap();"
+    },
+    {
+      "titulo": "ETAPA 2 - CRIAÇÃO DO RESPONSE",
+      "caminho": "building-blocks/Application/{nomeController}/Response/",
+      "descricao": "Criar um response com o nome {nomeEndpoint}Response.cs com as variáveis {colunas}"
+    },
+    {
+      "titulo": "ETAPA 3 - CRIAÇÃO DA INTERFACE E DO SERVICES",
+      "caminhoInterface": "building-blocks/Application/{nomeController}/Services/Interfaces/I{nomeController}Service.cs",
+      "caminhoService": "building-blocks/Application/{nomeController}/Services/{nomeController}Service.cs",
+      "descricao": "Adicionar método na interface e implementação do service",
+      "interfaceExemplo": "Task<Result<IList<{nomeEndpoint}Response>>> Get{nomeEndpoint}(CancellationToken cancellationToken = default);",
+      "implementacaoExemplo": "public async Task<Result<IList<{nomeEndpoint}Response>>> Get{nomeEndpoint}(CancellationToken cancellationToken = default)\n{\n    var result = await _providerRegisterRepository.Get{nomeEndpoint}(cancellationToken);\n    return result.AdaptToMapperResult<IList<{nomeEndpoint}Response>, IList<{nomeEndpoint}>>(_mapper);\n}"
+    },
+    {
+      "titulo": "ETAPA 4 - CRIAÇÃO DOMAIN (DOMAIN+INTERFACE REPOSITORY)",
+      "caminhoInterface": "building-blocks/Domain/{nomeController}/Interface/I{nomeEndpoint}Repository.cs",
+      "caminhoDomain": "building-blocks/Domain/{nomeEndpoint}.cs",
+      "descricao": "Criar interface e classe domain com as mesmas propriedades do Response",
+      "exemploInterface": "public interface I{nomeEndpoint}Repository : IBaseRepository,\n    IRepositoryGet<{nomeEndpoint}, int>,\n    IRepositoryActionCreateReturnEntity<{nomeEndpoint}, int>,\n    IRepositoryActionCreateReturnId<{nomeEndpoint}, int>,\n    IRepositoryActionUpdate<{nomeEndpoint}, int>,\n    IRepositoryActionRemove<{nomeEndpoint}, int>\n{\n    Task<List<{nomeEndpoint}>> Get{nomeEndpoint}(CancellationToken cancellationToken = default);\n    void SetTraceModelDbContext(IAuditTraceInfoModel traceInfoModel);\n}"
+    },
+    {
+      "titulo": "ETAPA 5 - APONTAR O SERVIÇO NO MÓDULO",
+      "caminho": "building-blocks/Infrastructure/Configurations/Modules/InfrastructureModule.cs",
+      "descricao": "Adicionar a linha do serviço conforme exemplo:",
+      "exemplo": "services.AddTransient<I{nomeController}Service, {nomeController}Service>();"
+    },
+    {
+      "titulo": "ETAPA 6 - ADICIONANDO A QUERY SQL NO REPOSITORY",
+      "caminho": "building-blocks/Infrastructure/Repository/QueriesSql/{nomeController}QueriesSql.cs",
+      "descricao": "Adicionar método para buscar dados via SQL",
+      "exemplo": "async Task<List<{nomeEndpoint}>> I{nomeController}RepositoryQueriesSql.Get{nomeEndpoint}(CancellationToken cancellationToken)\n{\n    string commandsql = @\"select * from {tabela} \";\n    var entity = await _{nomeController}Repository.GetConnection()\n        .QueryAsync<{nomeEndpoint}>(commandsql);\n    return entity.AsList();\n}"
+    },
+    {
+      "titulo": "ETAPA 7 - CRIAR O CONTROLLER",
+      "descricao": "Criar um endpoint do tipo {tipoEndpoint} no #{nomeController}Controller com o nome {nomeEndpoint}",
+      "exemplo": "/// <summary>\n/// Inclui Vinculo Especialidade Prestador\n/// </summary>\n[Http{tipoEndpoint}(\"{nomeEndpoint}\")]\n[MapToApiVersion(\"1.0\")]\n[Authorize(Policy = Permissions.ProviderRegister.View)]\n[ServiceFilter(typeof(ValidationFilterAttribute))]\n[ProducesResponseType(typeof(CustomResponse200<ProviderBaseTableResponse>), StatusCodes.Status200OK)]\n[ProducesResponseType(StatusCodes.Status400BadRequest)]\n[ProducesResponseType(StatusCodes.Status500InternalServerError)]\npublic async Task<IActionResult> Get{nomeEndpoint}(CancellationToken cancellationToken = default)\n{\n    var result = await _providerRegisterService.Get{nomeEndpoint}(cancellationToken);\n    return CustomResponse(result);\n}"
+    }
+  ]
+}
