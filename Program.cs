@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 // ---------------------------
 // Modelos auxiliares
@@ -237,7 +238,10 @@ public class Program
             Directory.CreateDirectory(cfg.PastaDestino);
             var filePath = Path.Combine(cfg.PastaDestino, $"{cfg.NomeEndpoint}_Prompt.txt");
 
-            File.WriteAllText(filePath, prompt, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+
+            var cleaned = Regex.Unescape(prompt);
+            File.WriteAllText(filePath, cleaned, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+
 
             Console.WriteLine($"✅ Prompt gerado com sucesso! Salvo em: {filePath}");
             return 0;
